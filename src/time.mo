@@ -87,7 +87,7 @@ module {
         dateFrom(t, 1_000_000_000);
     };
 
-    func completeZeros(d: Text, len: Nat): Text{
+    func fill(d: Text): Text{
         if (d.size() == 1){
             "0" # d;
         }
@@ -99,15 +99,15 @@ module {
     func toString(date : Date) : Text {
         Int.toText(date.year) #
         "-" #
-        completeZeros(Int.toText(date.month), 2) #
+        fill(Int.toText(date.month)) #
         "-" #
-        completeZeros(Int.toText(date.day),2) #
+        fill(Int.toText(date.day)) #
         " T " #
-        completeZeros(Int.toText(date.hour),2) #
+        fill(Int.toText(date.hour)) #
         ":" #
-        completeZeros(Int.toText(date.minute),2) #
+        fill(Int.toText(date.minute)) #
         ":" #
-        completeZeros(Int.toText(date.second),2) #
+        fill(Int.toText(date.second)) #
         "." #
         Int.toText(date.millis);
     };
