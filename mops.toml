@@ -1,0 +1,7 @@
+[package]
+name = "time"
+version = "1.0.0"
+description = "Nano, micro, millis, seconds timestamp to string date or DateType"
+repository = "https://github.com/ArielRobotti/time"
+keywords = [ "undefined" ]
+license = "MIT"

@@ -1,23 +1,14 @@
 {
   "canisters": {
-    "time_backend": {
-      "main": "src/time_backend/main.mo",
+    "example": {
+      "main": "example/main.mo",
       "type": "motoko"
-    },
-    "time_frontend": {
-      "dependencies": [
-        "time_backend"
-      ],
-      "source": [
-        "src/time_frontend/assets"
-      ],
-      "type": "assets"
     }
   },
   "defaults": {
     "build": {
       "args": "",
-      "packtool": ""
+      "packtool": "mops sources"
     }
   },
   "output_env_file": ".env",
