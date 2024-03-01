@@ -3,5 +3,15 @@ name = "time"
 version = "1.0.0"
 description = "Nano, micro, millis, seconds timestamp to string date or DateType"
 repository = "https://github.com/ArielRobotti/time"
-keywords = [ "undefined" ]
+keywords = [
+  "Date",
+  "Time",
+  "Timestamp",
+  "Seconds",
+  "Milliseconds",
+  "Microseconds",
+  "Nanoseconds",
+  "Datestring",
+  "StringDate"
+]
 license = "MIT"
