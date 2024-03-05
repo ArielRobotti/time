@@ -142,6 +142,7 @@ module {
 
         let years =  textToInt(dateComp[0]) - 1970;  
         var month = textToInt(dateComp[1]);
+        assert (month > 0 and month <= 12);
         let day = textToInt(dateComp[2]);
 
         var daysResult: Int = 1461 * (years / 4);
@@ -158,9 +159,10 @@ module {
         };
 
         if (indexY == 2){ dInM[1] := 29};
+        assert (day > 0 and day <= dInM[Prim.nat64ToNat(Prim.intToNat64Wrap(month)) - 1]);
         
         var indexM = 0;
-        while(month > 1){  // > 0  o > 1 1 el el ultimo incompleto
+        while(month > 1){
             daysResult += dInM[indexM];
             indexM += 1;
             month -= 1;
@@ -184,5 +186,4 @@ module {
         };
         nanos;
     };
-
 };
