@@ -173,13 +173,27 @@ module {
     
         if(components.size() > 1){
             let hourComp = Iter.toArray(Text.split(components[1], #char(':')));
-            nanos += textToInt(hourComp[0]) * 3_600_000_000_000;
-            nanos += textToInt(hourComp[1]) * 60_000_000_000;
+            
+            let hours = textToInt(hourComp[0]);
+            assert (hours >= 0 and hours < 24);
+            nanos +=  hours * 3_600_000_000_000;
+            
+            let minutes = textToInt(hourComp[1]);
+            assert (minutes >=0 and minutes < 60);
+            nanos +=  minutes * 60_000_000_000;
+
             let secAndMillis = Iter.toArray(Text.split(hourComp[2], #char('.')));
-            nanos += textToInt(secAndMillis[0]) * 1_000_000_000;
+
+            let sec = textToInt(secAndMillis[0]);
+            assert (sec >= 0 and sec < 60);
+            nanos +=  sec * 1_000_000_000;
+
             if(secAndMillis.size() > 1){
+                
                 var decimals = secAndMillis[1];
+                assert (decimals.size() <= 9);
                 while (decimals.size() < 9){ decimals := decimals # "0" };
+
                 nanos += textToInt(decimals);
             };
         };
