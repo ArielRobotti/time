@@ -1,6 +1,6 @@
 [package]
 name = "time"
-version = "1.0.5"
+version = "1.0.6"
 description = "Nano, micro, millis, seconds timestamp to string date or DateType"
 repository = "https://github.com/ArielRobotti/time"
 keywords = [
