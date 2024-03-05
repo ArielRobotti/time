@@ -169,7 +169,6 @@ module {
         };
 
         daysResult += day - 1;
-
         var nanos = daysResult * 86_400_000_000_000;
     
         if(components.size() > 1){
