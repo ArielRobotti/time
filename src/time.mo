@@ -13,7 +13,7 @@ module {
         hour : Int;
         minute : Int;
         second : Int;
-        millis : Int;
+        decimals : Int;
     };
 
     public func now() : Int { Prim.nat64ToNat(Prim.time()) };
@@ -31,7 +31,7 @@ module {
         var dayName = dayOfWeek(day);
         var year = (day / 1461) * 4 + 1970;
         var month = 1;
-        var millis = t % div;
+        var decimals = t % div;
         let second = (t / (div)) % 60;
         let minute = (t / (60 * div)) % 60;
         let hour = (t / (3_600 * div)) % 24;
@@ -61,7 +61,7 @@ module {
                 break y;
             };
         };
-        return { year; month; day; dayName; hour; minute; second; millis };
+        return { year; month; day; dayName; hour; minute; second; decimals };
     };
 
     public func fromSec(t : Int) : Date { dateFrom(t, 1) };
@@ -72,24 +72,28 @@ module {
 
     public func fromNanos(t : Int) : Date { dateFrom(t, 1_000_000_000) };
 
-    func fill(d : Text) : Text {
-        if (d.size() == 1) { "0" # d } else { d };
+    func fill(d : Text, size: Nat) : Text {
+        var result = d;
+        while (result.size() < size){
+            result  := "0" # result;
+        };
+        result;
     };
 
     func toString(date : Date) : Text {
         Int.toText(date.year) #
         "-" #
-        fill(Int.toText(date.month)) #
+        fill(Int.toText(date.month), 2) #
         "-" #
-        fill(Int.toText(date.day)) #
+        fill(Int.toText(date.day), 2) #
         " " #
-        fill(Int.toText(date.hour)) #
+        fill(Int.toText(date.hour), 2) #
         ":" #
-        fill(Int.toText(date.minute)) #
+        fill(Int.toText(date.minute), 2) #
         ":" #
-        fill(Int.toText(date.second)) #
+        fill(Int.toText(date.second), 2) #
         "." #
-        Int.toText(date.millis);
+        fill(Int.toText(date.decimals), 9);
     };
 
     func intToNat(i : Int) : Nat {
@@ -182,19 +186,19 @@ module {
             assert (minutes >=0 and minutes < 60);
             nanos +=  minutes * 60_000_000_000;
 
-            let secAndMillis = Iter.toArray(Text.split(hourComp[2], #char('.')));
+            let secAndDecimals = Iter.toArray(Text.split(hourComp[2], #char('.')));
 
-            let sec = textToInt(secAndMillis[0]);
+            let sec = textToInt(secAndDecimals[0]);
             assert (sec >= 0 and sec < 60);
             nanos +=  sec * 1_000_000_000;
 
-            if(secAndMillis.size() > 1){
-                
-                var decimals = secAndMillis[1];
+            if(secAndDecimals.size() > 1){
+                var decimals = secAndDecimals[1];
                 assert (decimals.size() <= 9);
-                while (decimals.size() < 9){ decimals := decimals # "0" };
+                decimals := "1" # decimals;
+                while (decimals.size() < 10){ decimals := decimals # "0" };
 
-                nanos += textToInt(decimals);
+                nanos += (textToInt(decimals) - 10 ** 9);
             };
         };
         nanos;
