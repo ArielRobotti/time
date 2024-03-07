@@ -146,7 +146,9 @@ module {
 
         let years =  textToInt(dateComp[0]) - 1970;  
         var month = textToInt(dateComp[1]);
-        assert (month > 0 and month <= 12);
+        if (month < 1 or month > 12){
+            Prim.trap("Month number out of range. Format require -> YYYY-MM-DD HH:MM:SS.sss......")
+        };
         let day = textToInt(dateComp[2]);
 
         var daysResult: Int = 1461 * (years / 4);
@@ -163,7 +165,9 @@ module {
         };
 
         if (indexY == 2){ dInM[1] := 29};
-        assert (day > 0 and day <= dInM[Prim.nat64ToNat(Prim.intToNat64Wrap(month)) - 1]);
+        if (day < 1 or day > dInM[Prim.nat64ToNat(Prim.intToNat64Wrap(month)) - 1]){
+            Prim.trap("Day number out of range. Format require -> YYYY-MM-DD HH:MM:SS.sss......")
+        };
         
         var indexM = 0;
         while(month > 1){
@@ -179,26 +183,31 @@ module {
             let hourComp = Iter.toArray(Text.split(components[1], #char(':')));
             
             let hours = textToInt(hourComp[0]);
-            assert (hours >= 0 and hours < 24);
+            if (hours < 0 or hours > 23){
+                Prim.trap("Incorrect hour format. 00 to 23")
+            };
             nanos +=  hours * 3_600_000_000_000;
             
             let minutes = textToInt(hourComp[1]);
-            assert (minutes >=0 and minutes < 60);
+            if (minutes < 0 or minutes > 59){
+                Prim.trap("Incorrect minutes format. 00 to 59")
+            };
             nanos +=  minutes * 60_000_000_000;
 
             let secAndDecimals = Iter.toArray(Text.split(hourComp[2], #char('.')));
 
             let sec = textToInt(secAndDecimals[0]);
-            assert (sec >= 0 and sec < 60);
+            if (sec < 0 or sec > 59){
+                Prim.trap("Incorrect seconds format. 00 to 59")
+            };
             nanos +=  sec * 1_000_000_000;
 
             if(secAndDecimals.size() > 1){
                 var decimals = secAndDecimals[1];
                 assert (decimals.size() <= 9);
-                decimals := "1" # decimals;
-                while (decimals.size() < 10){ decimals := decimals # "0" };
+                while (decimals.size() < 9){ decimals := decimals # "0" };
 
-                nanos += (textToInt(decimals) - 10 ** 9);
+                nanos += textToInt(decimals);
             };
         };
         nanos;
